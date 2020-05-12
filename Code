@@ -1,33 +1,90 @@
-package immtableStringclass;
+package practice.hiding;
 
 import java.util.ArrayList;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
-public   class A2 {
-	
-	  public static void main(String args[] ) throws Exception {
-		  
-		   Scanner sc=new Scanner(System.in);
-		    int t=sc.nextInt();
-		    while(t-->0){
-		        int n=sc.nextInt();
-		        int a[]=new int[n];
-		        for(int i=0;i<n;i++){
-		            a[i]=sc.nextInt();
-		        }
-		        Arrays.sort(a);
-		        long ans=0;
-		        while(n>3){
-		            ans+=Math.min(2*a[1]+a[0]+a[n-1],2*a[0]+a[n-1]+a[n-2]);
-		            n-=2;
-		        }
-		        if(n==3)
-		          ans+=a[0]+a[1]+a[2];
-		        else if(n==2)
-		          ans+=a[1];
-		        else ans+=a[0];
-		        System.out.println(ans);
-		    }}
-	    }
-	
-	
+public class costOfTravel {
+
+	public static void main(String... args) {
+
+		System.out.print("input no. of tests to perform : ");
+		Scanner sc = new Scanner(System.in);
+		int totalTestsRemaining = sc.nextInt();
+		System.out.println();
+
+		while (totalTestsRemaining > 0) {
+			System.out.print("Input total number of people : ");
+			int totalPeople = sc.nextInt();
+			System.out.println();
+
+			List<Integer> costOfPeople = new ArrayList<>();
+
+			System.out.print("input cost one by one and press enter : ");
+			System.out.print("      ");
+
+			for (int i = totalPeople; i > 0; i--) {
+				int cost = sc.nextInt();
+				costOfPeople.add(cost);
+			}
+
+			System.out.println();
+
+			minimumCost(costOfPeople);
+
+			totalTestsRemaining--;
+		}
+
+		System.out.println("Thanks for using the application :-) , Bye");
+		System.exit(1);
+	}
+
+	static void minimumCost(List<Integer> costOfPeople) {
+
+		Collections.sort(costOfPeople);
+		Integer totalCost = 0;
+
+		if (costOfPeople.size() == 3)
+			totalCost += costOfPeople.get(0) + costOfPeople.get(1) + costOfPeople.get(2);
+
+		if (costOfPeople.size() == 2)
+			totalCost += costOfPeople.get(1);
+
+		if (costOfPeople.size() == 1)
+			totalCost += costOfPeople.get(0);
+
+		if (costOfPeople.size() > 3) {
+
+			while (costOfPeople.size() > 0) {
+
+				totalCost += costOfPeople.get(0) + costOfPeople.get(1);
+
+				int temp = costOfPeople.get(1);
+				costOfPeople.remove(costOfPeople.get(1));
+
+				if (costOfPeople.size() == 3) {
+					totalCost += temp * 2 + costOfPeople.get(2);
+					break;
+				}
+
+				totalCost += costOfPeople.get(costOfPeople.size() - 1);
+
+				costOfPeople.remove(costOfPeople.size() - 1);
+				costOfPeople.remove(costOfPeople.size() - 1);
+
+				costOfPeople.add(temp);
+				Collections.sort(costOfPeople);
+				totalCost += temp;
+
+				if (costOfPeople.size() == 3) {
+					totalCost += costOfPeople.get(0) + costOfPeople.get(1) + costOfPeople.get(2);
+					break;
+				}
+			}
+		}
+
+		System.out.println("Minimum cost is : " + totalCost);
+	}
+
+}
